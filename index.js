@@ -1,5 +1,8 @@
 //we use require since we are using Vanilla js. If react, we'd use import statement
 const redux = require('redux');
+const reduxLogger = require('redux-logger');
+const logger = reduxLogger.createLogger();
+const applyMiddleware = redux.applyMiddleware
 
 // initialize createStore Function
 const createStore = redux.createStore;
@@ -75,7 +78,7 @@ const cakeReducer = (state = initialCakeState,action) => {
 }
 const iceCreamReducer = (state = InitialIceCreamState,action) => {
     switch(action.type){
-        case BUY_CAKE: return {
+        case BUY_ICECREAM: return {
             ...state, // Spread initial state then update numOfCakes
             numOfIcecreams: state.numOfIcecreams - 2.5
         }
@@ -89,14 +92,10 @@ const rootReducer = combineReducers({
     icecream: iceCreamReducer
 })
 // Create the Redux store
-const store = createStore(rootReducer);
+const store = createStore(rootReducer,applyMiddleware(logger));
 
-console.log('initialState: ', store.getState());
 
-const unsubscribe = store.subscribe(()=> {
-    console.log('Updated State', store.getState());
-}
-    );
+const unsubscribe = store.subscribe(()=> {});
 store.dispatch(buyCake());
 store.dispatch(buyCake());
 store.dispatch(buyIceCream());
